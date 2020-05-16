@@ -11,7 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -31,9 +32,11 @@ public class AuthorizeController {
 
     @GetMapping("/callback")
     public String callback(
-                            @RequestParam(name = "code") String code,
-                            @RequestParam(name = "state") String state,
-                            @Autowired HttpServletRequest request) throws IOException {
+            @RequestParam(name = "code") String code,
+            @RequestParam(name = "state") String state,
+
+            HttpServletResponse response) throws IOException {
+
 
         AccessonTokenDto accessonTokenDto = new AccessonTokenDto();
         accessonTokenDto.setCode(code);
@@ -47,13 +50,14 @@ public class AuthorizeController {
         if(gitHubUser != null){
             //登录成功，写cookie和session
             User user = new User();
-            user.setToken(UUID.randomUUID().toString());
+            String token = UUID.randomUUID().toString();
+            user.setToken(token);
             user.setName(gitHubUser.getName());
             user.setAccountID(String.valueOf(gitHubUser.getId()));
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             userMapper.insert(user);
-            request.getSession().setAttribute("gitHubUser",gitHubUser);
+            response.addCookie(new Cookie("token",token));
             return "redirect:/";
 
         }else{
