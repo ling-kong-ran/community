@@ -5,12 +5,14 @@ import com.xiaoling.community.controller.AuthorizeController;
 import com.xiaoling.community.dto.AccessonTokenDto;
 import com.xiaoling.community.dto.GitHubUser;
 import okhttp3.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
 @Component
 public class GitHubProvider {
+    //拿到accesstaken
     public String getAccessTaken(AccessonTokenDto accessonTokenDto){
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
 
@@ -33,20 +35,26 @@ public class GitHubProvider {
 
         return null;
     }
+    //拿到user
     public GitHubUser getUser(String acessToken) throws IOException {
+
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("https://api.github.com/user?"+acessToken)
+                .url("https://api.github.com/user?access_token="+acessToken)
                 .build();
         Response response = client.newCall(request).execute();
-        String string = null;
+
         try {
-            string = response.body().string();
+            String string = response.body().string();
+            GitHubUser gitHubUser = JSON.parseObject(string, GitHubUser.class);
+            return gitHubUser;
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
-        GitHubUser gitHubUser = JSON.parseObject(string, GitHubUser.class);
-        return gitHubUser;
+
+
+
+
     }
 }
