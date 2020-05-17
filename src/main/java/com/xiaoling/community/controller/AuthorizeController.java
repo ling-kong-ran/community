@@ -45,7 +45,8 @@ public class AuthorizeController {
         accessonTokenDto.setClient_id(ClientID);
         accessonTokenDto.setState(state);
         String acessToken=gitHubProvider.getAccessTaken(accessonTokenDto);//post
-        GitHubUser gitHubUser=gitHubProvider.getUser(acessToken);
+        GitHubUser gitHubUser=new GitHubUser();
+                gitHubUser=gitHubProvider.getUser(acessToken);
         System.out.println(gitHubUser.getName());
         if(gitHubUser != null){
             //登录成功，写cookie和session
