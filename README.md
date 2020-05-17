@@ -5,6 +5,7 @@
 [github第三方登录](https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/)
 ## 日志
 2020.5.16完成h2数据库的插入
+2020.5.17完成发布文章功能
 ##工具
 Git 
 Visual Paradigm
