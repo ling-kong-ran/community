@@ -1,11 +1,9 @@
 package com.xiaoling.community.controller;
 
 
-import com.xiaoling.community.dto.PageDto;
+import com.xiaoling.community.dto.PaginationDto;
 import com.xiaoling.community.dto.QuestionDto;
-import com.xiaoling.community.mapper.QuestionMapper;
 import com.xiaoling.community.mapper.UserMapper;
-import com.xiaoling.community.model.Question;
 import com.xiaoling.community.model.User;
 import com.xiaoling.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +25,11 @@ public class IndexController {
 
     @GetMapping("/")
     public String index(HttpServletRequest request,
-                        Model model
+                        Model model,
+                        @RequestParam(name = "page",defaultValue = "1") Integer page,
+                        @RequestParam(name = "size",defaultValue = "5") Integer size
+
+
     ) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
@@ -43,8 +45,8 @@ public class IndexController {
             }
 
         }
-        List<QuestionDto> questionList =questionService.list();
-        model.addAttribute("questions",questionList);
+        PaginationDto pagination =questionService.list(page,size);
+        model.addAttribute("pagination",pagination);
         return "index";
     }
 }
