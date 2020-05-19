@@ -2,9 +2,18 @@ body{
     background-color: #efefef;
 }
 .main{
-    margin: 30px;
+    margin: 35px;
 }
 .btn-publish{
     float: right;
     margin-bottom: 15px;
+}
+.media-object{
+    width: 35px;
+    height: 35px;
+}
+.text-desc{
+    font-size: 12px;
+    font-weight: normal;
+    color: #999;
 }
