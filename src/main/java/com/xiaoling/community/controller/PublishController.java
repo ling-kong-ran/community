@@ -50,39 +50,25 @@ public class PublishController {
             return "publish";
         }
 
-        User user = null;
+        User user =(User) request.getSession().getAttribute("user");
+        if (user != null) {
+            request.getSession().setAttribute("user", user);//拿到session
+            //发布问题保存到数据库
+            Question question = new Question();
 
-        Cookie[] cookies = request.getCookies();
+            question.setTitle(title);
+            question.setDescription(description);
+            question.setTag(tag);
+            question.setGmtCreate(System.currentTimeMillis());
+            question.setGmtModified(question.getGmtCreate());
+            question.setCreator(user.getId());
 
-        if (cookies ==null) {
-            model.addAttribute("error","用户未登录");
-            return "publish";}
-
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    user = userMapper.findByToken(token);
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);//拿到session
-                        //发布问题保存到数据库
-                        Question question = new Question();
-
-                        question.setTitle(title);
-                        question.setDescription(description);
-                        question.setTag(tag);
-                        question.setGmtCreate(System.currentTimeMillis());
-                        question.setGmtModified(question.getGmtCreate());
-                        question.setCreator(user.getId());
-
-                        questionMapper.create(question);
-                        return "redirect:/";//发布完成跳回主页
-                    }
-                    break;
-                }
-            }
-
-
-            return "redirect:/";
+            questionMapper.create(question);
+            return "redirect:/";//发布完成跳回主页
+            // return "redirect:/";
+        }
+        model.addAttribute("error","用户未登录");
+        return "publish";
 
 
 
@@ -90,5 +76,7 @@ public class PublishController {
 
 
 
-    }
-}
+
+
+    }}
+
