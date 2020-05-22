@@ -1,16 +1,15 @@
 package com.xiaoling.community.controller;
 
+import com.xiaoling.community.dto.QuestionDto;
 import com.xiaoling.community.mapper.QuestionMapper;
 import com.xiaoling.community.mapper.UserMapper;
 import com.xiaoling.community.model.Question;
 import com.xiaoling.community.model.User;
+import com.xiaoling.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +20,22 @@ public class PublishController {
     private QuestionMapper questionMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private QuestionService questionService;
+
+    @GetMapping("/publish/{id}")
+    public String edit(
+            @PathVariable("id") Integer id,
+            Model model
+    ){
+        QuestionDto question = questionService.getById(id);
+        model.addAttribute("title",question.getTitle());
+        model.addAttribute("description",question.getDescription());
+        model.addAttribute("tag",question.getTag());
+        model.addAttribute("id",question.getId());
+        return "publish";
+
+    }
 
     @GetMapping("/publish")
     public String publish(){
@@ -28,9 +43,10 @@ public class PublishController {
     }
     @PostMapping("/publish")
     public String doPublish(
-            @RequestParam("title") String title,
-            @RequestParam("description") String description,
-            @RequestParam("tag") String tag,
+            @RequestParam(value = "title",required = false) String title,
+            @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "tag",required = false) String tag,
+            @RequestParam(value = "id",required = false) Integer id,
             @Autowired HttpServletRequest request,
             @Autowired Model model
     ){
@@ -59,11 +75,10 @@ public class PublishController {
             question.setTitle(title);
             question.setDescription(description);
             question.setTag(tag);
-            question.setGmtCreate(System.currentTimeMillis());
-            question.setGmtModified(question.getGmtCreate());
             question.setCreator(user.getId());
+            question.setId(id);
 
-            questionMapper.create(question);
+            questionService.createOrUpdate(question);
             return "redirect:/";//发布完成跳回主页
             // return "redirect:/";
         }
