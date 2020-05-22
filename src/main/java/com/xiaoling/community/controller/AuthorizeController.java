@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.UUID;
@@ -48,15 +49,13 @@ public class AuthorizeController {
         GitHubUser gitHubUser=new GitHubUser();
                 gitHubUser=gitHubProvider.getUser(acessToken);
 
-        if(gitHubUser != null){
+        if(gitHubUser != null &&gitHubUser.getId()!=null){
             //登录成功，写cookie和session
             User user = new User();
             String token = UUID.randomUUID().toString();
             user.setToken(token);
             user.setName(gitHubUser.getName());
             user.setAccountKey(String.valueOf(gitHubUser.getId()));
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreate());
             user.setAvatarUrl(gitHubUser.getAvatar_url());
             user.setBio(gitHubUser.getBio());
 
@@ -70,5 +69,16 @@ public class AuthorizeController {
         }
 
 
+    }
+    @GetMapping("/logout")
+    public String logout(
+            HttpServletResponse response,
+            HttpServletRequest request
+    ){
+        request.getSession().removeAttribute("user");
+        Cookie cookie=new Cookie("token",null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "redirect:/";
     }
 }
