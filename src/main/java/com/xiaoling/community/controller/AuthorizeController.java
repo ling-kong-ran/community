@@ -2,12 +2,13 @@ package com.xiaoling.community.controller;
 
 import com.xiaoling.community.dto.AccessonTokenDto;
 import com.xiaoling.community.dto.GitHubUser;
-import com.xiaoling.community.mapper.UserMapper;
 import com.xiaoling.community.model.User;
 import com.xiaoling.community.provider.GitHubProvider;
+import com.xiaoling.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -29,7 +30,7 @@ public class AuthorizeController {
     @Value("${github.redirect.uri}")
     private String redirectUrl;
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
     @GetMapping("/callback")
     public String callback(
@@ -46,10 +47,10 @@ public class AuthorizeController {
         accessonTokenDto.setClient_id(ClientID);
         accessonTokenDto.setState(state);
         String acessToken=gitHubProvider.getAccessTaken(accessonTokenDto);//post
-        GitHubUser gitHubUser=new GitHubUser();
-                gitHubUser=gitHubProvider.getUser(acessToken);
+        GitHubUser gitHubUser=gitHubProvider.getUser(acessToken);
 
-        if(gitHubUser != null &&gitHubUser.getId()!=null){
+
+        if(gitHubUser != null&&gitHubUser.getId() != null){
             //登录成功，写cookie和session
             User user = new User();
             String token = UUID.randomUUID().toString();
@@ -57,9 +58,7 @@ public class AuthorizeController {
             user.setName(gitHubUser.getName());
             user.setAccountKey(String.valueOf(gitHubUser.getId()));
             user.setAvatarUrl(gitHubUser.getAvatar_url());
-            user.setBio(gitHubUser.getBio());
-
-            userMapper.insert(user);
+            userService.createOrUptaed(user);
             response.addCookie(new Cookie("token",token));
             return "redirect:/";
 
@@ -71,14 +70,14 @@ public class AuthorizeController {
 
     }
     @GetMapping("/logout")
-    public String logout(
-            HttpServletResponse response,
-            HttpServletRequest request
-    ){
+    public String logout(HttpServletRequest request,
+                         HttpServletResponse response,
+                         Model model){
         request.getSession().removeAttribute("user");
         Cookie cookie=new Cookie("token",null);
         cookie.setMaxAge(0);
         response.addCookie(cookie);
+       // model.addAttribute("life",cookie);
         return "redirect:/";
     }
 }

@@ -58,7 +58,7 @@ public class QuestionService {
         }else {
             totalPage =totalCount/size+1;
         }
-        paginationDto.setPagination(totalCount,page,size);
+        paginationDto.setPagination(totalPage,page,size);
         if(page<1){
             page=1;
         }
@@ -84,6 +84,7 @@ public class QuestionService {
     }
 
     public QuestionDto getById(Integer id) {
+
         Question question=questionMapper.getById(id);
         User user=userMapper.findById(question.getCreator());
         QuestionDto questionDto = new QuestionDto();

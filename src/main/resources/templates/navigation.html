@@ -29,8 +29,8 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="/publish">发布</a></li>
                     <li class="dropdown" th:if="${session.user !=null}">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                            <span th:text="${session.user.getName()}"></span>
+                        <a href="/callback" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <span th:text="${session.user.name} "></span>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
