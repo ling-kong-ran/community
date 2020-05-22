@@ -11,7 +11,7 @@ public class UserService {
     private UserMapper userMapper;
 
     public void createOrUptaed(User user) {
-        User dbUser=userMapper.findByAccountKey(user.getAccountKey());
+        User dbUser=userMapper.findByAccountId(user.getAccountKey());
         if(dbUser==null){
             //插入
             user.setGmtCreate(System.currentTimeMillis());

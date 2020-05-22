@@ -14,7 +14,7 @@ public interface UserMapper {
 
 
     @Select("select * from user where account_key= #{AccountKey} ")
-    User findByAccountKey(@Param("AccountKey")String AccountKey);//今天就在这里的AccountKey上载坑了
+    User findByAccountId(@Param("AccountKey")String AccountKey);//今天就在这里的AccountKey上载坑了
 
 
     @Update({"update user set name=#{name},token=#{token},gmt_modified=#{gmtModified},avatar_url=#{avatarUrl} where id=#{id}"})
