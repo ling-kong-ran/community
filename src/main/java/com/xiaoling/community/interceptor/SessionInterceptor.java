@@ -1,5 +1,6 @@
 package com.xiaoling.community.interceptor;
 
+import com.xiaoling.community.exception.MyExceptionCode;
 import com.xiaoling.community.mapper.UserMapper;
 import com.xiaoling.community.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ public class SessionInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Cookie[] cookies = request.getCookies();
         if (cookies != null&&cookies.length!=0) {
+
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
                     String token = cookie.getValue();
@@ -33,6 +35,7 @@ public class SessionInterceptor implements HandlerInterceptor {
 
         }
         return true;
+
     }
 
     @Override

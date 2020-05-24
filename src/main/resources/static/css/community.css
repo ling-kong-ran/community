@@ -21,3 +21,7 @@ body{
     color: #999;
     font-size: 12px;
 }
+.jumbotron{
+    background-color: #f2dede;
+    margin: 35px;
+}
