@@ -26,7 +26,9 @@ public class QuestionController {
 
 
             QuestionDto questionDto =questionService.getById(id);
-            //if(questionDto.getId() == null) return "index";
+            Integer newViewCount =questionService.creaseViewCount(id);
+            questionDto.setViewCount(newViewCount);
+            //if(questionDto.getType() == null) return "index";
             model.addAttribute("question",questionDto);
             return "/question";
 

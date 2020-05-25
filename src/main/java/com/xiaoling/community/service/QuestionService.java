@@ -109,4 +109,10 @@ public class QuestionService {
             questionMapper.update(question);
         }
     }
+
+    public Integer creaseViewCount(Integer id) {
+        questionMapper.creaseViewCount(id);
+
+        return questionMapper.getViewCountById(id);
+    }
 }
