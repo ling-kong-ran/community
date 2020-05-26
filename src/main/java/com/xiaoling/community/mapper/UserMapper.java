@@ -10,7 +10,7 @@ public interface UserMapper {
     @Select("select * from user where TOKEN= #{token} ")//从数据库中查找token以便持久化登录
     User findByToken(@Param("token") String token);
     @Select("select * from user where id= #{id} ")
-    User findById(@Param("id")Integer id);
+    User findById(@Param("id")Long id);
 
 
     @Select("select * from user where account_key= #{AccountKey} ")

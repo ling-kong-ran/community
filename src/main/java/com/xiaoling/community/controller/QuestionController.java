@@ -19,14 +19,13 @@ public class QuestionController {
 
     @GetMapping("/question/{id}")
     public String question(
-            @PathVariable("id") Integer id,
-            Model model,
-            HttpServletRequest request
+            @PathVariable("id") Long id,
+            Model model
     ){
 
 
             QuestionDto questionDto =questionService.getById(id);
-            Integer newViewCount =questionService.creaseViewCount(id);
+            Integer newViewCount = Math.toIntExact(questionService.creaseViewCount(id));
             questionDto.setViewCount(newViewCount);
             //if(questionDto.getType() == null) return "index";
             model.addAttribute("question",questionDto);
@@ -40,6 +39,7 @@ public class QuestionController {
         model.addAttribute("questionerror","请登录");
         return "redirect:/";
     }
+
 
 
 

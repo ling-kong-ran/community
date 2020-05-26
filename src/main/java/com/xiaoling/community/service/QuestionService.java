@@ -49,10 +49,10 @@ public class QuestionService {
         return paginationDto;
     }
 
-    public PaginationDto list(Integer userId, Integer page, Integer size) {
+    public PaginationDto list(Long userId, Integer page, Integer size) {
         PaginationDto paginationDto = new PaginationDto();
         Integer totalPage;
-        Integer totalCount = questionMapper.countByUserId(userId);
+        Integer totalCount = Math.toIntExact(questionMapper.countByUserId(userId));
 
         if(totalCount % size==0){
             totalPage =totalCount/size;
@@ -84,7 +84,7 @@ public class QuestionService {
         return paginationDto;
     }
 
-    public QuestionDto getById(Integer id) {
+    public QuestionDto getById(Long id) {
 
         Question question=questionMapper.getById(id);
         if(question==null) throw new MyExceptionCode((long) 404,"您找的问题被偷走了，要不然换个姿势试试");
@@ -110,7 +110,7 @@ public class QuestionService {
         }
     }
 
-    public Integer creaseViewCount(Integer id) {
+    public Long creaseViewCount(Long id) {
         questionMapper.creaseViewCount(id);
 
         return questionMapper.getViewCountById(id);
