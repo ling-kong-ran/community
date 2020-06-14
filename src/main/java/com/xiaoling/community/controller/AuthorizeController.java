@@ -8,7 +8,6 @@ import com.xiaoling.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -26,7 +25,7 @@ public class AuthorizeController {
     @Value("${github.client.id}")
     private String ClientID;
     @Value("${github.client.secret}")
-    private  String secret;
+    private String secret;
     @Value("${github.redirect.uri}")
     private String redirectUrl;
     @Autowired
@@ -46,11 +45,11 @@ public class AuthorizeController {
         accessonTokenDto.setRedirect_uri(redirectUrl);
         accessonTokenDto.setClient_id(ClientID);
         accessonTokenDto.setState(state);
-        String acessToken=gitHubProvider.getAccessTaken(accessonTokenDto);//post
-        GitHubUser gitHubUser=gitHubProvider.getUser(acessToken);
+        String acessToken = gitHubProvider.getAccessTaken(accessonTokenDto);//post
+        GitHubUser gitHubUser = gitHubProvider.getUser(acessToken);
 
 
-        if(gitHubUser != null&&gitHubUser.getId() != null){
+        if (gitHubUser != null && gitHubUser.getId() != null) {
             //登录成功，写cookie和session
             User user = new User();
             String token = UUID.randomUUID().toString();
@@ -59,25 +58,25 @@ public class AuthorizeController {
             user.setAccountKey(String.valueOf(gitHubUser.getId()));
             user.setAvatarUrl(gitHubUser.getAvatar_url());
             userService.createOrUptaed(user);
-            response.addCookie(new Cookie("token",token));
-            return "redirect:/";
+            response.addCookie(new Cookie("token", token));
 
-        }else{
-            //重新登录
+        } else {
             return "redirect:/";
+            //重新登录
         }
+        return "redirect:/";
 
 
     }
+
     @GetMapping("/logout")
     public String logout(HttpServletRequest request,
-                         HttpServletResponse response,
-                         Model model){
+                         HttpServletResponse response) {
         request.getSession().removeAttribute("user");
-        Cookie cookie=new Cookie("token",null);
+        Cookie cookie = new Cookie("token", null);
         cookie.setMaxAge(0);
         response.addCookie(cookie);
-       // model.addAttribute("life",cookie);
+        // model.addAttribute("life",cookie);
         return "redirect:/";
     }
 }

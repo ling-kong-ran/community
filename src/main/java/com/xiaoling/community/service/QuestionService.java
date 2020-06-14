@@ -3,6 +3,7 @@ package com.xiaoling.community.service;
 import com.xiaoling.community.dto.PaginationDto;
 import com.xiaoling.community.dto.QuestionDto;
 import com.xiaoling.community.exception.MyExceptionCode;
+import com.xiaoling.community.exception.MyExceptionCodeEnum;
 import com.xiaoling.community.mapper.QuestionMapper;
 import com.xiaoling.community.mapper.UserMapper;
 import com.xiaoling.community.model.Question;
@@ -87,7 +88,7 @@ public class QuestionService {
     public QuestionDto getById(Long id) {
 
         Question question=questionMapper.getById(id);
-        if(question==null) throw new MyExceptionCode((long) 404,"您找的问题被偷走了，要不然换个姿势试试");
+        if(question==null) throw new MyExceptionCode(MyExceptionCodeEnum.QUESTION_NOT_FOUND);
         User user=userMapper.findById(question.getCreator());
         QuestionDto questionDto = new QuestionDto();
         //把question对象的所有属性拷贝到questiondto

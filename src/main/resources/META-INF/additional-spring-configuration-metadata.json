@@ -1,0 +1,18 @@
+{
+  "properties": [
+    {
+      "name": "github.client.secret",
+      "type": "java.lang.String",
+      "description": "Description for github.client.secret."
+    },
+    {
+      "name": "github.redirect.uri",
+      "type": "java.lang.String",
+      "description": "Description for github.redirect.uri."
+    },
+    {
+      "name": "github.client.id",
+      "type": "java.lang.String",
+      "description": "Description for github.client.id."
+    }
+  ] }

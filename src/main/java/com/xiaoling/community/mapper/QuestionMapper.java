@@ -1,6 +1,5 @@
 package com.xiaoling.community.mapper;
 
-import com.xiaoling.community.dto.QuestionDto;
 import com.xiaoling.community.model.Question;
 import org.apache.ibatis.annotations.*;
 

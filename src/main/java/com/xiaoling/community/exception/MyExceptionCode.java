@@ -1,21 +1,22 @@
 package com.xiaoling.community.exception;
 
-import lombok.Data;
-
-@Data
-public class MyExceptionCode extends RuntimeException{
-    private long code;
+public class MyExceptionCode extends RuntimeException {
+    private Integer code;
     private String msg;
 
-    public MyExceptionCode(Long code, String msg){
-        super(msg);
-        this.code = code;
-        this.msg = msg;
+    public MyExceptionCode(IMyExceptionCode iMyExceptionCode){
+        this.code = iMyExceptionCode.getCode();
+        this.msg = iMyExceptionCode.getMsg();
     }
 
-    public MyExceptionCode(String msg){
-        super(msg);
-        this.msg = msg;
+
+    public Integer getCode() {
+        return code;
     }
+
+    public String getMsg() {
+        return msg;
+    }
+
 }
 

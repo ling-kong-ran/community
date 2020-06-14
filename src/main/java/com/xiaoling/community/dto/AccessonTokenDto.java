@@ -2,6 +2,7 @@ package com.xiaoling.community.dto;
 
 import lombok.Data;
 
+
 @Data
 public class AccessonTokenDto {
     private String client_id;

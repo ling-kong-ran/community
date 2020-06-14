@@ -1,14 +1,14 @@
 package com.xiaoling.community.service;
 
-import com.xiaoling.community.controller.QuestionController;
 import com.xiaoling.community.dto.CommentDto;
+import com.xiaoling.community.exception.MyExceptionCode;
+import com.xiaoling.community.exception.MyExceptionCodeEnum;
 import com.xiaoling.community.mapper.CommentMapper;
 import com.xiaoling.community.mapper.QuestionMapper;
 import com.xiaoling.community.model.Comment;
 import com.xiaoling.community.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 @Service
 public class CommentService {
@@ -30,5 +30,12 @@ public class CommentService {
 
 
         return commentDto;
+    }
+
+    public void create(Comment comment) {
+        if (comment.getParentId() == null ||comment.getParentId()==0){
+            throw new MyExceptionCode(MyExceptionCodeEnum.COMMENT_TYPE_NOT_CHOICE);
+        }else {commentMapper.create(comment);}
+
     }
 }
